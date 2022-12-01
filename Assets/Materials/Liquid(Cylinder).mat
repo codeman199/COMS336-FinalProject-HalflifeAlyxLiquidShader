@@ -26,14 +26,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Line: 0
+    - _Line: 0.0757
     - _NormalsDistortion: 1
     - _RimPower: 0
-    - _WobbleX: 0
-    - _WobbleZ: 0
+    - _WobbleX: NaN
+    - _WobbleZ: NaN
     m_Colors:
-    - _FoamColor: {r: 1, g: 1, b: 1, a: 1}
+    - _FoamColor: {r: 1, g: 0, b: 0.4560132, a: 1}
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Tint: {r: 1, g: 1, b: 1, a: 1}
-    - _TopColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Tint: {r: 1, g: 0, b: 0.9463, a: 1}
+    - _TopColor: {r: 1, g: 0, b: 0.64725256, a: 1}
   m_BuildTextureStacks: []
