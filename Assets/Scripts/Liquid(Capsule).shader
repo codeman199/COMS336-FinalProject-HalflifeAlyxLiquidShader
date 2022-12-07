@@ -78,7 +78,7 @@ Shader "Unlit/FX/Liquid"
                 float3 worldPos = mul (unity_ObjectToWorld, v.vertex.xyz);
                 float3 worldPosOffset = float3(worldPos.x, worldPos.y , worldPos.z) - _FillAmount;
                 // rotate it around XY
-                float3 worldPosX= RotateAroundYInDegrees((worldPosOffset),360);
+                float3 worldPosX = RotateAroundYInDegrees((worldPosOffset),360);
                 // rotate around XZ
                 float3 worldPosZ = float3 (worldPosX.y, worldPosX.z, worldPosX.x);
                 // combine rotations with worldPos, based on sine wave from script
@@ -129,7 +129,6 @@ Shader "Unlit/FX/Liquid"
 
                 //VFACE returns positive for front facing, negative for backfacing
                 return facing > 0 ? finalResult: topColor;
-
             }
             ENDCG
         }
