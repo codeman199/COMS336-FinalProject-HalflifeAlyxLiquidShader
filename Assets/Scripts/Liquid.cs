@@ -9,7 +9,7 @@ public class Liquid : MonoBehaviour
     [SerializeField]
     float WobbleSpeedMove = 1f;
     [SerializeField]
-    float fillAmount;
+    float fillAmount = 0.4f;
     [SerializeField]
     float Recovery = 1f;
     [Range(0, 1)]
@@ -85,6 +85,7 @@ public class Liquid : MonoBehaviour
         lastRot = transform.rotation;
     }
 
+    //This function is shared code from a unity help forum to calculate angular velocity
     //https://forum.unity.com/threads/manually-calculate-angular-velocity-of-gameobject.289462/#post-4302796
     Vector3 GetAngularVelocity(Quaternion foreLastFrameRotation, Quaternion lastFrameRotation)
     {
@@ -117,7 +118,6 @@ public class Liquid : MonoBehaviour
 
         for (int i = 0; i < vertices.Length; i++)
         {
-
             Vector3 position = transform.TransformPoint(vertices[i]);
 
             if (position.y < lowestY)
