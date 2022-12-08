@@ -27,8 +27,8 @@ Material:
     m_Ints: []
     m_Floats:
     - _NormalsDistortion: 1
-    - _WobbleX: 0
-    - _WobbleZ: 0
+    - _WobbleX: NaN
+    - _WobbleZ: NaN
     m_Colors:
-    - _Tint: {r: 1, g: 1, b: 1, a: 1}
+    - _Tint: {r: 1, g: 0, b: 0.7534723, a: 1}
   m_BuildTextureStacks: []
