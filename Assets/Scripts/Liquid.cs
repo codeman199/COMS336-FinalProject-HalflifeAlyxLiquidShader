@@ -6,16 +6,22 @@ public class Liquid : MonoBehaviour
 {
     [SerializeField]
     float MaxWobble = 0.03f;
+
     [SerializeField]
     float WobbleSpeedMove = 1f;
-    [SerializeField]
-    float fillAmount = 0.4f;
+
+    [Range(0, 1)]
+    public float fillAmount = 0.5f;
+
     [SerializeField]
     float Recovery = 1f;
+
     [Range(0, 1)]
     public float CompensateShapeAmount;
+
     [SerializeField]
     Mesh mesh;
+
     Renderer rend;
     Vector3 pos;
     Vector3 lastPos;
@@ -67,25 +73,16 @@ public class Liquid : MonoBehaviour
         wobbleAmountToAddX += Mathf.Clamp((velocity.x + angularVelocity.z) * MaxWobble, -MaxWobble, MaxWobble);
         wobbleAmountToAddZ += Mathf.Clamp((velocity.z + angularVelocity.x) * MaxWobble, -MaxWobble, MaxWobble);
 
-        // set fill amount
-        Vector3 worldPos = transform.TransformPoint(new Vector3(mesh.bounds.center.x, mesh.bounds.center.y, mesh.bounds.center.z));
-        if (CompensateShapeAmount > 0)
-        {
-            comp = Vector3.Lerp(comp, (worldPos - GetLowestPoint()), Time.deltaTime * 5);
-            pos = worldPos - transform.position - new Vector3(0, fillAmount + (comp.y * CompensateShapeAmount), 0);
-        }
-        else
-        {
-            pos = worldPos - transform.position - new Vector3(0, fillAmount, 0);
-        }
-        rend.sharedMaterial.SetVector("_FillAmount", pos);
-
         // keep last position
         lastPos = transform.position;
         lastRot = transform.rotation;
+
+        // set fill amount
+        Vector3 worldPos = transform.TransformPoint(new Vector3(mesh.bounds.center.x, mesh.bounds.center.y, mesh.bounds.center.z));
+        pos = worldPos - transform.position - new Vector3(0, -fillAmount + 1, 0);
+        rend.sharedMaterial.SetVector("_FillAmount", pos);
     }
 
-    //This function is shared code from a unity help forum to calculate angular velocity
     //https://forum.unity.com/threads/manually-calculate-angular-velocity-of-gameobject.289462/#post-4302796
     Vector3 GetAngularVelocity(Quaternion foreLastFrameRotation, Quaternion lastFrameRotation)
     {
@@ -118,6 +115,7 @@ public class Liquid : MonoBehaviour
 
         for (int i = 0; i < vertices.Length; i++)
         {
+
             Vector3 position = transform.TransformPoint(vertices[i]);
 
             if (position.y < lowestY)

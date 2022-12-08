@@ -9,9 +9,6 @@ Shader "Unlit/FX/Liquid"
         [HideInInspector] _WobbleX ("WobbleX", Range(-1,1)) = 0.0
         [HideInInspector] _WobbleZ ("WobbleZ", Range(-1,1)) = 0.0
         _NormalsDistortion ("Distort Liquid based on Normals", Range(0,1)) = 1.0
-        [HDR]_TopColor ("Top Color", Color) = (0.4,0.8,0.6,0.75)
-        [HDR]_FoamColor ("Foam Line Color", Color) = (0.22,0.62,0.42,0.75)
-        _Line ("Foam Line Width", Range(0,0.1)) = 0.0
     }
 
     //SubShader (Used to define GPU settings and in this case, a shader program)
@@ -73,11 +70,10 @@ Shader "Unlit/FX/Liquid"
 
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                UNITY_TRANSFER_FOG(o,o.vertex);
 
                 // get world position of the vertex - transform position
                 float3 worldPos = mul (unity_ObjectToWorld, v.vertex.xyz);
-                float3 worldPosOffset = float3(worldPos.x, worldPos.y , worldPos.z) - _FillAmount;
+                float3 worldPosOffset = float3(worldPos.x, worldPos.y , worldPos.z) + _FillAmount;
 
                 // rotate it around XY
                 float3 worldPosX= RotateAroundYInDegrees((worldPosOffset),360);
@@ -89,7 +85,7 @@ Shader "Unlit/FX/Liquid"
                 float3 worldPosAdjusted = worldPos + (worldPosX  * _WobbleX)+ (worldPosZ* _WobbleZ);
 
                 // how high up the liquid is
-                o.fillPosition =  worldPosAdjusted.y - _FillAmount.y;
+                o.fillPosition =  worldPosAdjusted.y + _FillAmount.y;
                 o.viewDir = normalize(ObjSpaceViewDir(v.vertex));
                 o.normal = v.normal;
                 return o;
