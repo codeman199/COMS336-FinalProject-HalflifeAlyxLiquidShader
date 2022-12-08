@@ -15,13 +15,13 @@ Shader "Unlit/FX/Liquid"
     //https://docs.unity3d.com/Manual/SL-SubShader.html
     SubShader
     {
-        Tags {"Queue"="Geometry"  "DisableBatching" = "True" }
-
         Pass
         {
-            Zwrite On
-            Cull Off // we want the front and back faces
-            AlphaToMask On // transparency
+            //Allows the coloring of all faces of the object (not just front)
+            Cull Off
+
+            //Sets transparency of object
+            AlphaToMask On
 
             CGPROGRAM
             #pragma vertex vertexShader
@@ -30,7 +30,7 @@ Shader "Unlit/FX/Liquid"
 
             //Providing vertex data to vertex programs
             //https://docs.unity3d.com/Manual/SL-VertexProgramInputs.html
-            struct appdata
+            struct vertexData
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
@@ -63,22 +63,26 @@ Shader "Unlit/FX/Liquid"
             }
 
 
-            v2f vertexShader (appdata v)
+            v2f vertexShader (vertexData v)
             {
                 v2f o;
-
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+
                 // get world position of the vertex - transform position
                 float3 worldPos = mul(unity_ObjectToWorld, v.vertex.xyz);
                 float3 worldPosOffset = float3(worldPos.x, worldPos.y , worldPos.z) - _FillAmount;
+
                 // rotate it around XY
-                float3 worldPosX= RotateAroundYInDegrees((worldPosOffset),360);
+                float3 worldPosXY= RotateAroundYInDegrees((worldPosOffset),360);
+
                 // rotate around XZ
-                float3 worldPosZ = float3 (worldPosX.y, worldPosX.z, worldPosX.x);
+                float3 worldPosXZ = float3 (worldPosXY.y, worldPosXY.z, worldPosXY.x);
+
                 // combine rotations with worldPos, based on sine wave from script
-                float3 worldPosAdjusted = worldPos + (worldPosX  * _WobbleX) + (worldPosZ* _WobbleZ);
-                // how high up the liquid is
+                float3 worldPosAdjusted = worldPos + (worldPosXY  * _WobbleX) + (worldPosXZ* _WobbleZ);
+                
+                //how 'full' the object is of liquid
                 o.fillPosition =  worldPosAdjusted.y - _FillAmount.y;
                 o.viewDir = normalize(ObjSpaceViewDir(v.vertex));
                 o.normal = v.normal;
