@@ -32,8 +32,8 @@ Material:
     - _WobbleX: NaN
     - _WobbleZ: NaN
     m_Colors:
-    - _FoamColor: {r: 0.8679245, g: 0, b: 0, a: 1}
+    - _FoamColor: {r: 0.8396226, g: 0.08317016, b: 0.08317016, a: 1}
     - _RimColor: {r: 0.19461787, g: 0.19461787, b: 0.19461787, a: 1}
-    - _Tint: {r: 1, g: 0.0990566, b: 0.0990566, a: 1}
+    - _Tint: {r: 1.6877406, g: 0, b: 0, a: 1}
     - _TopColor: {r: 1, g: 0.36320752, b: 0.36320752, a: 1}
   m_BuildTextureStacks: []

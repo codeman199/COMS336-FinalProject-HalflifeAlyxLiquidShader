@@ -82,7 +82,7 @@ Shader "Unlit/FX/Liquid"
                 // rotate around XZ
                 float3 worldPosZ = float3 (worldPosX.y, worldPosX.z, worldPosX.x);
                 // combine rotations with worldPos, based on sine wave from script
-                float3 worldPosAdjusted = worldPos + (worldPosX  * _WobbleX)+ (worldPosZ* _WobbleZ);
+                float3 worldPosAdjusted = worldPos + (worldPosX  * _WobbleX) + (worldPosZ* _WobbleZ);
                 // how high up the liquid is
                 o.fillPosition =  worldPosAdjusted.y - _FillAmount.y;
                 o.viewDir = normalize(ObjSpaceViewDir(v.vertex));

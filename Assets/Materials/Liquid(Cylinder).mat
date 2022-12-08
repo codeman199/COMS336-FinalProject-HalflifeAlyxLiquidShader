@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Liquid(Cylinder)
-  m_Shader: {fileID: 4800000, guid: bb11bae453eb2b24eb5c713fe5aacdea, type: 3}
+  m_Shader: {fileID: 4800000, guid: a72f643eb71584a23a4183af5437c4d9, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -26,12 +26,15 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Glossiness: 0
     - _Line: 0.0757
+    - _Metallic: 0
     - _NormalsDistortion: 1
     - _RimPower: 0
     - _WobbleX: NaN
     - _WobbleZ: NaN
     m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _FoamColor: {r: 1, g: 0, b: 0.4560132, a: 1}
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _Tint: {r: 1, g: 0, b: 0.9463, a: 1}
