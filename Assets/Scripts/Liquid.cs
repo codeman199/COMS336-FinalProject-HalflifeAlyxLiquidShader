@@ -20,20 +20,16 @@ public class Liquid : MonoBehaviour
     Mesh mesh;
 
     Renderer rend;
-    Vector3 pos;
+	
     Vector3 lastPos;
-    Vector3 velocity;
     Quaternion lastRot;
-    Vector3 angularVelocity;
 	
     float wobbleX;
     float wobbleZ;
 	
     float addWobbleX;
     float addWobbleZ;
-    float pulse;
     float time = 0.5f;
-    Vector3 comp;
 
     //Use this for initialization
     void Start()
@@ -57,17 +53,17 @@ public class Liquid : MonoBehaviour
         addWobbleZ = Mathf.Lerp(addWobbleZ, 0, Time.deltaTime * (recoverAmt));
 
         //Make a sine wave of the decreasing wobble
-        pulse = 2 * Mathf.PI * wobbleSpeed;
-        wobbleX = addWobbleX * Mathf.Sin(pulse * time);
-        wobbleZ = addWobbleZ * Mathf.Sin(pulse * time);
+        float intensity = 2 * Mathf.PI * wobbleSpeed;
+        wobbleX = addWobbleX * Mathf.Sin(intensity * time);
+        wobbleZ = addWobbleZ * Mathf.Sin(intensity * time);
 
         //Send wobble to the shader
         rend.sharedMaterial.SetFloat("_WobbleX", wobbleX);
         rend.sharedMaterial.SetFloat("_WobbleZ", wobbleZ);
 
         //Calculate velocity (distance/time)
-        velocity = (lastPos - transform.position) / Time.deltaTime;
-        angularVelocity = GetAngularVelocity(lastRot, transform.rotation);
+        Vector3 velocity = (lastPos - transform.position) / Time.deltaTime;
+        Vector3 angularVelocity = GetAngularVelocity(lastRot, transform.rotation);
 
         //Add clamped velocity to wobble
         addWobbleX += Mathf.Clamp((velocity.x + angularVelocity.z) * maxWobble, -maxWobble, maxWobble);
@@ -79,12 +75,13 @@ public class Liquid : MonoBehaviour
 
         //Set fill amount
         Vector3 worldPos = transform.TransformPoint(new Vector3(mesh.bounds.center.x, mesh.bounds.center.y, mesh.bounds.center.z));
-        pos = worldPos - transform.position - new Vector3(0, -fillAmount + 1, 0);
+        Vector3 finalFillAmt = worldPos - transform.position - new Vector3(0, -fillAmount + 1, 0);
 		
 		//Send fill to shader
-        rend.sharedMaterial.SetVector("_FillAmount", pos);
+        rend.sharedMaterial.SetVector("_FillAmount", finalFillAmt);
     }
 
+	//This portion of code was used from this unity forum post
     //https://forum.unity.com/threads/manually-calculate-angular-velocity-of-gameobject.289462/#post-4302796
     Vector3 GetAngularVelocity(Quaternion foreLastFrameRotation, Quaternion lastFrameRotation)
     {
@@ -107,7 +104,8 @@ public class Liquid : MonoBehaviour
         }
         return new Vector3(q.x * gain, q.y * gain, q.z * gain);
     }
-
+	
+	
     Vector3 GetLowestPoint()
     {
         float lowestY = float.MaxValue;
