@@ -17,6 +17,9 @@ This is a unity project, it was built using unity engine ver. 2021.3.15f1
               (b) You may click the play button in the top middle of the screen to run the project
               (c) Clicking play will show the "Game" view, you can click back onto the "Scene" to move and rotate the objects in the scene to see the simulation
               
+              
+       If there are further questions you may reach us at codystri@iastate.edu or emcclure@iastate.edu
+              
         
         
        
