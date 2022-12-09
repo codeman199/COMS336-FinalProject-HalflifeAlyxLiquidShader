@@ -10,7 +10,7 @@ public class Liquid : MonoBehaviour
     [SerializeField]
     float wobbleSpeed = 1f;
 
-    [Range(0, 1)]
+    [Range(-0.25f, 1.25f)]
     public float fillAmount = 0.5f;
 
     [SerializeField]
@@ -21,15 +21,15 @@ public class Liquid : MonoBehaviour
 
     Renderer rend;
 	
-    Vector3 lastPos;
-    Quaternion lastRot;
-	
     float wobbleX;
     float wobbleZ;
 	
     float addWobbleX;
     float addWobbleZ;
     float time = 0.5f;
+	
+    Vector3 oldPos;
+    Quaternion oldRot;
 
     //Use this for initialization
     void Start()
@@ -62,16 +62,16 @@ public class Liquid : MonoBehaviour
         rend.sharedMaterial.SetFloat("_WobbleZ", wobbleZ);
 
         //Calculate velocity (distance/time)
-        Vector3 velocity = (lastPos - transform.position) / Time.deltaTime;
-        Vector3 angularVelocity = GetAngularVelocity(lastRot, transform.rotation);
+        Vector3 velocity = (oldPos - transform.position) / Time.deltaTime;
+        Vector3 angularVelocity = GetAngularVelocity(oldRot, transform.rotation);
 
         //Add clamped velocity to wobble
         addWobbleX += Mathf.Clamp((velocity.x + angularVelocity.z) * maxWobble, -maxWobble, maxWobble);
         addWobbleZ += Mathf.Clamp((velocity.z + angularVelocity.x) * maxWobble, -maxWobble, maxWobble);
 
         // keep last position
-        lastPos = transform.position;
-        lastRot = transform.rotation;
+        oldPos = transform.position;
+        oldRot = transform.rotation;
 
         //Set fill amount
         Vector3 worldPos = transform.TransformPoint(new Vector3(mesh.bounds.center.x, mesh.bounds.center.y, mesh.bounds.center.z));
