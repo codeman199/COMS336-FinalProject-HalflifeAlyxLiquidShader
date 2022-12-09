@@ -37,6 +37,7 @@ Shader "Unlit/FX/Liquid"
                 float3 normal : NORMAL;
             };
 
+            //Vertex2Fragment object
             struct v2f
             {
                 float2 uv : TEXCOORD0;
@@ -53,6 +54,7 @@ Shader "Unlit/FX/Liquid"
             float _NormalsDistortion;
             float4 _Tint;
 
+            //Unity Provided Function
             float4 RotateAroundYInDegrees (float3 vertex, float degrees)
             {
                 float alpha = degrees * UNITY_PI / 180;
@@ -73,10 +75,8 @@ Shader "Unlit/FX/Liquid"
                 float3 worldPos = mul(unity_ObjectToWorld, v.vertex.xyz);
                 float3 worldPosOffset = float3(worldPos.x, worldPos.y , worldPos.z) - _FillAmount;
 
-                // rotate it around XY
+                // rotate around XY and XZ
                 float3 worldPosXY= RotateAroundYInDegrees((worldPosOffset),360);
-
-                // rotate around XZ
                 float3 worldPosXZ = float3 (worldPosXY.y, worldPosXY.z, worldPosXY.x);
 
                 // combine rotations with worldPos, based on sine wave from script

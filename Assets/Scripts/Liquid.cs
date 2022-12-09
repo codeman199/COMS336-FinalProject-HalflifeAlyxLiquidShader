@@ -5,19 +5,16 @@ using UnityEngine;
 public class Liquid : MonoBehaviour
 {
     [SerializeField]
-    float MaxWobble = 0.03f;
+    float maxWobble = 0.03f;
 
     [SerializeField]
-    float WobbleSpeedMove = 1f;
+    float wobbleSpeed = 1f;
 
     [Range(0, 1)]
     public float fillAmount = 0.5f;
 
     [SerializeField]
-    float Recovery = 1f;
-
-    [Range(0, 1)]
-    public float CompensateShapeAmount;
+    float recoverAmt = 1f;
 
     [SerializeField]
     Mesh mesh;
@@ -28,15 +25,17 @@ public class Liquid : MonoBehaviour
     Vector3 velocity;
     Quaternion lastRot;
     Vector3 angularVelocity;
-    float wobbleAmountX;
-    float wobbleAmountZ;
-    float wobbleAmountToAddX;
-    float wobbleAmountToAddZ;
+	
+    float wobbleX;
+    float wobbleZ;
+	
+    float addWobbleX;
+    float addWobbleZ;
     float pulse;
     float time = 0.5f;
     Vector3 comp;
 
-    // Use this for initialization
+    //Use this for initialization
     void Start()
     {
         rend = GetComponent<Renderer>();
@@ -49,37 +48,40 @@ public class Liquid : MonoBehaviour
             mesh = GetComponent<MeshFilter>().sharedMesh;
         }
     }
+
     private void Update()
     {
         time += Time.deltaTime;
         // decrease wobble over time
-        wobbleAmountToAddX = Mathf.Lerp(wobbleAmountToAddX, 0, Time.deltaTime * (Recovery));
-        wobbleAmountToAddZ = Mathf.Lerp(wobbleAmountToAddZ, 0, Time.deltaTime * (Recovery));
+        addWobbleX = Mathf.Lerp(addWobbleX, 0, Time.deltaTime * (recoverAmt));
+        addWobbleZ = Mathf.Lerp(addWobbleZ, 0, Time.deltaTime * (recoverAmt));
 
-        // make a sine wave of the decreasing wobble
-        pulse = 2 * Mathf.PI * WobbleSpeedMove;
-        wobbleAmountX = wobbleAmountToAddX * Mathf.Sin(pulse * time);
-        wobbleAmountZ = wobbleAmountToAddZ * Mathf.Sin(pulse * time);
+        //Make a sine wave of the decreasing wobble
+        pulse = 2 * Mathf.PI * wobbleSpeed;
+        wobbleX = addWobbleX * Mathf.Sin(pulse * time);
+        wobbleZ = addWobbleZ * Mathf.Sin(pulse * time);
 
-        // send it to the shader
-        rend.sharedMaterial.SetFloat("_WobbleX", wobbleAmountX);
-        rend.sharedMaterial.SetFloat("_WobbleZ", wobbleAmountZ);
+        //Send wobble to the shader
+        rend.sharedMaterial.SetFloat("_WobbleX", wobbleX);
+        rend.sharedMaterial.SetFloat("_WobbleZ", wobbleZ);
 
-        // velocity
+        //Calculate velocity (distance/time)
         velocity = (lastPos - transform.position) / Time.deltaTime;
         angularVelocity = GetAngularVelocity(lastRot, transform.rotation);
 
-        // add clamped velocity to wobble
-        wobbleAmountToAddX += Mathf.Clamp((velocity.x + angularVelocity.z) * MaxWobble, -MaxWobble, MaxWobble);
-        wobbleAmountToAddZ += Mathf.Clamp((velocity.z + angularVelocity.x) * MaxWobble, -MaxWobble, MaxWobble);
+        //Add clamped velocity to wobble
+        addWobbleX += Mathf.Clamp((velocity.x + angularVelocity.z) * maxWobble, -maxWobble, maxWobble);
+        addWobbleZ += Mathf.Clamp((velocity.z + angularVelocity.x) * maxWobble, -maxWobble, maxWobble);
 
         // keep last position
         lastPos = transform.position;
         lastRot = transform.rotation;
 
-        // set fill amount
+        //Set fill amount
         Vector3 worldPos = transform.TransformPoint(new Vector3(mesh.bounds.center.x, mesh.bounds.center.y, mesh.bounds.center.z));
         pos = worldPos - transform.position - new Vector3(0, -fillAmount + 1, 0);
+		
+		//Send fill to shader
         rend.sharedMaterial.SetVector("_FillAmount", pos);
     }
 
@@ -87,7 +89,6 @@ public class Liquid : MonoBehaviour
     Vector3 GetAngularVelocity(Quaternion foreLastFrameRotation, Quaternion lastFrameRotation)
     {
         var q = lastFrameRotation * Quaternion.Inverse(foreLastFrameRotation);
-        // no rotation?
         // You may want to increase this closer to 1 if you want to handle very small rotations.
         // Beware, if it is too close to one your answer will be Nan
         if (Mathf.Abs(q.w) > 1023.5f / 1024.0f)
@@ -115,9 +116,7 @@ public class Liquid : MonoBehaviour
 
         for (int i = 0; i < vertices.Length; i++)
         {
-
             Vector3 position = transform.TransformPoint(vertices[i]);
-
             if (position.y < lowestY)
             {
                 lowestY = position.y;
