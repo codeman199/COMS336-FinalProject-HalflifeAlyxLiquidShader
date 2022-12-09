@@ -9,7 +9,7 @@ This is a unity project, it was built using unity engine ver. 2021.3.15f1
               (b) Select 3D core as the template
               (c) Make note of the directory the project is being created, give it any name, and click create project
               (d) The projecct will run and begin to open, this is fine
-        (4) Take our source code folder and copy and paste it into the directory of your new unity projecct, replacing all duplicate files
+        (4) Take our source code folder and copy and paste its contents into the directory of your new unity projecct, replacing all duplicate files
         (5) If the project is already running from step 3, a dialog box will pop up, click reload
               (a) If the project isn't already running, run it
         (6) You should now be able to see our work within the unity project
