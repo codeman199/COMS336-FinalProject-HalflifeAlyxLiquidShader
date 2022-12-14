@@ -89,21 +89,19 @@ Shader "Unlit/FX/Liquid"
                 return o;
             }
 
-            fixed4 fragmentShader (v2f i, fixed facing : VFACE) : SV_Target
+            fixed4 fragmentShader (v2f i) : SV_Target
             {
-                // add velocity based deform, using the normals for a fresnel effect
-                float movementFresnel = facing > 0 ? dot(i.normal, i.viewDir) : dot(-i.normal, -i.viewDir);
-                float movingfillPosition = i.fillPosition + (saturate(movementFresnel * i.fillPosition) *(_WobbleX + _WobbleZ) * _NormalsDistortion);
+                // add velocity based deform
+                float movingFill = i.fillPosition + ((i.fillPosition) * (_WobbleX + _WobbleZ));
 
                 // sample the texture based on the fill line
-                fixed4 col = tex2D(_MainTex, movingfillPosition) * _Tint;
+                fixed4 liquidColor = tex2D(_MainTex, movingFill) * _Tint;
 
                 // Calculate edge
-                float cutoffTop = step(movingfillPosition, 0.5);
+                float cutoffTop = step(movingFill, 0.5);
 
                 // Calculate liquid and require cutoff value
-                float4 finalResult = cutoffTop * col;
-
+                float4 finalResult = cutoffTop * liquidColor;
                 return finalResult;
             }
             ENDCG
